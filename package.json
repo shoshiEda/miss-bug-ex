@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "dev":"node --ignore \"./data\" server.js"
+    "dev":"nodemon --ignore \"./data\" server.js"
   },
   "author": "shoshi",
   "license": "ISC",

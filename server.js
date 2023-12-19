@@ -36,7 +36,7 @@ const bug={
 }
 console.log(bug)
   bugService.save(bug)
-  .then(bug => send(bug))
+  .then(bug => res.send(bug))
  
  }) 
     

@@ -1,0 +1,21 @@
+[
+  {
+    "title": "hgy",
+    "severity": 5,
+    "_id": "qpYdU",
+    "createdAt": "2023-12-19T06:55:22.070Z"
+  },
+  {
+    "title": "huhu",
+    "severity": 10,
+    "_id": "EKmRy",
+    "createdAt": "2023-12-19T00:34:02.476Z"
+  },
+  {
+    "_id": "abc123",
+    "title": "Cannot save a Car",
+    "description": "problem when clicking Save",
+    "severity": 3,
+    "createdAt": 1542107359454
+  }
+]

@@ -1,6 +1,8 @@
 import fs from 'fs'
 import { utilService } from './utils.service.js';
 
+
+
 export const bugService = {
     query,
     getById,
@@ -18,7 +20,9 @@ function query(){
 
 
 function getById(bugId) {
+    console.log(bugId);
     const bug = bugs.find(bug => bug._id === bugId)
+    console.log(bug);
     if (!bug) return Promise.reject('Bug dosent exist!')
     
     return Promise.resolve(bug)

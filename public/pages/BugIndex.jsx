@@ -1,8 +1,12 @@
 import { bugService } from '../services/bug.service.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 import { BugList } from '../cmps/BugList.jsx'
+import { CarFilter } from '../cmps/CarFilter.jsx'
+
 
 const { useState, useEffect } = React
+//const [filterBy, setFilterBy] = useState(bugService.getDefaultFilter())
+//const debounceOnSetFilter = useRef(utilService.debounce(onSetFilter, 500))
 
 export function BugIndex() {
     const [bugs, setBugs] = useState(null)
@@ -71,6 +75,18 @@ export function BugIndex() {
         <main>
             <h3>Bugs App</h3>
             <main>
+            <section className="pagination">
+                <button>+</button>
+                {/*pageIdx + 1 || 'No Pagination'*/}
+                <button>-</button>
+                <button>Toggle pagination</button>
+            </section>
+            <h3>Sort by:</h3>
+            <select>
+                <option>title</option>
+                <option>severity</option>
+            </select>
+            <CarFilter/>
                 <button onClick={onAddBug}>Add Bug ⛐</button>
                 <BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
             </main>

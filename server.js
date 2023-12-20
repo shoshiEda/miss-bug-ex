@@ -1,4 +1,5 @@
 import { bugService } from './services/bug.service.js'
+import { userService } from './services/user.service.js'
 import { loggerService } from './services/logger.service.js'
 import cookieParser from 'cookie-parser'
 
@@ -82,16 +83,76 @@ console.log(bug);
 })
 
 app.delete('/api/bug/:id', (req, res) => {
-    const bugId = req.params.id
-    bugService.remove(bugId)
-        .then(res.redirect('/api/bug'))
+    console.log('server')
+    const loggedinUser = userService.validateToken(req.cookies.loginToken)
+    if (!loggedinUser) return res.status(401).send('Cannot remove car')
+
+    const { bugId } = req.params
+    console.log(bugId,loggedinUser)
+    bugService.remove(bugId, loggedinUser)
+        .then(() => {
+            loggerService.info(`Bug ${bugId} removed`)
+
+            res.send('Removed!')
+        })
         .catch((err) => {
             loggerService.error('Cannot remove car', err)
             res.status(400).send('Cannot remove car')
         })
+
 })
 
+//app.get('/**',(req,res) => res.sendFile(path.resolve('public/index.html')))
 
+// AUTH API
+app.get('/api/user', (req, res) => {
+    userService.query()
+        .then((users) => {
+            res.send(users)
+        })
+        .catch((err) => {
+            console.log('Cannot load users', err)
+            res.status(400).send('Cannot load users')
+        })
+})
+
+app.post('/api/auth/login', (req, res) => {
+    const credentials = req.body
+    console.log(credentials)
+    userService.checkLogin(credentials)
+        .then(user => {
+            if (user) {
+                const loginToken = userService.getLoginToken(user)
+                res.cookie('loginToken', loginToken)
+                res.send(user)
+            } else {
+                res.status(401).send('Invalid Credentials')
+            }
+        })
+})
+
+app.post('/api/auth/signup', (req, res) => {
+    const credentials = req.body
+    userService.save(credentials)
+        .then(user => {
+            if (user) {
+                const loginToken = userService.getLoginToken(user)
+                res.cookie('loginToken', loginToken)
+                res.send(user)
+            } else {
+                res.status(400).send('Cannot signup')
+            }
+        })
+})
+
+app.post('/api/auth/logout', (req, res) => {
+    res.clearCookie('loginToken')
+    res.send('logged-out!')
+})
+
+/*app.get('/**', (req, res) => {
+    res.sendFile(path.resolve('public/index.html'))
+})*/
 
 
 

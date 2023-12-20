@@ -1,5 +1,7 @@
 import fs from 'fs'
 import { utilService } from './utils.service.js';
+import { loggerService } from './logger.service.js'
+
 
 
 
@@ -28,9 +30,18 @@ function getById(bugId) {
     return Promise.resolve(bug)
 }
 
-function remove(bugId){
-    const bugIdx = bugs.findIndex(bug => bug._id===bugId)
-    bugs.splice(bugIdx,1)
+function remove(bugId,loggedinUser){
+    const idx = bugs.findIndex(bug => bug._id === bugId)
+    if (idx === -1) return Promise.reject('No Such Bug')
+    const bug = bugs[idx]
+    console.log(bug)
+
+    if (!loggedinUser.isAdmin &&
+        bug.owner._id !== loggedinUser._id) {
+        return Promise.reject('Not your bug')
+    }
+
+    bugs.splice(idx, 1)
     return _saveBugssToFile()
 }
 
@@ -46,6 +57,7 @@ function save(bug){
     else{
         bug._id=utilService.makeId()
         bug.createdAt=new Date()
+        bug.owner = userService.getLoggedinUser()
         bugs.unshift(bug)
     }
     return  _saveBugssToFile().then(() => bug)

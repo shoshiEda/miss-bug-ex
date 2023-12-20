@@ -1,7 +1,7 @@
 
 
 
-export function CarFilter(){
+export function BugFilter(){
 
 
     return(

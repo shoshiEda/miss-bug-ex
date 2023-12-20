@@ -1,7 +1,7 @@
 import { bugService } from '../services/bug.service.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 import { BugList } from '../cmps/BugList.jsx'
-import { CarFilter } from '../cmps/CarFilter.jsx'
+import { BugFilter } from '../cmps/BugFilter.jsx'
 
 
 const { useState, useEffect } = React
@@ -20,6 +20,7 @@ export function BugIndex() {
     }
 
     function onRemoveBug(bugId) {
+        console.log(bugId)
         bugService
             .remove(bugId)
             .then(() => {
@@ -86,7 +87,7 @@ export function BugIndex() {
                 <option>title</option>
                 <option>severity</option>
             </select>
-            <CarFilter/>
+            <BugFilter/>
                 <button onClick={onAddBug}>Add Bug ⛐</button>
                 <BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
             </main>

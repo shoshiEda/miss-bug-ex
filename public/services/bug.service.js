@@ -1,5 +1,6 @@
 
 import { storageService } from './async-storage.service.js'
+import { userService } from './user.service.js'
 import { utilService } from './util.service.js'
 
 const STORAGE_KEY = 'bugDB'
@@ -30,7 +31,7 @@ function getById(bugId) {
 function remove(bugId) {
     console.log(bugId)
     //return storageService.remove(STORAGE_KEY, bugId)
-    return axios.get(BASE_URL+ bugId).then(res=>res.data)
+    return axios.delete(BASE_URL+ bugId).then(res=>res.data)
 
 }
 
@@ -40,6 +41,7 @@ function save(bug) {
     if (bug._id) {
         return axios.put(BASE_URL, bug).then(res => res.data)
     } else {
+       // bug.owner = userService.getLoggedinUser()
         return axios.post(BASE_URL, bug).then(res => res.data)
     }
 }
